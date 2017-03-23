@@ -29,7 +29,8 @@ packageTask.getHandler = function (grunt) {
             'include_time': true,
             'include_version': true,
             'package_folder': './',
-            'include_files': []
+            'include_files': [],
+            'exclude_awssdk': false
         });
 
         var pkg = JSON.parse(fs.readFileSync(path.resolve(options.package_folder + '/package.json'), "utf8"));
@@ -77,6 +78,10 @@ packageTask.getHandler = function (grunt) {
 
                 zipArchive.pipe(output);
 
+                if (options.exclude_awssdk) {
+                  rimraf.sync(install_location + '/node_modules/' + pkg.name+'/node_modules/aws-sdk');
+                }
+
                 zipArchive.bulk([
                     {
                         src: ['./**'],
@@ -106,14 +111,14 @@ packageTask.getHandler = function (grunt) {
                         fs.createReadStream(zip_path).pipe(dist_zip);
 
                         dist_zip.on('close', function () {
-                            rimraf(install_location, function () {
+                            //rimraf(install_location, function () {
                                 grunt.config.set('lambda_deploy.' + task.target + '.package', dist_path);
                                 grunt.config.set('lambda_deploy.' + task.target + '.version', pkg.version);
                                 grunt.config.set('lambda_deploy.' + task.target + '.archive_name', archive_name);
                                 grunt.config.set('lambda_deploy.' + task.target + '.package_name', pkg.name);
                                 grunt.log.writeln('Created package at ' + dist_path);
                                 done(true);
-                            });
+                            //});
                         });
                     });
                 });

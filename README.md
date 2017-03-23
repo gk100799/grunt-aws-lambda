@@ -200,6 +200,12 @@ Default value: `dist`
 
 The folder where the complete zip files should be saved relative to the Gruntfile.
 
+##### options.exclude_awssdk
+Type: `Boolean`
+Default value: `false`
+
+When true, the aws-sdk package won't be included into the zip file. In fact this package is already installed on lambda environment.
+
 #### Usage Examples
 
 ##### Default Options
@@ -308,7 +314,7 @@ For example, your Gruntfile.js might contain the following:
 
 ```javascript
 grunt.initConfig({
-    lambda_deploy: { 
+    lambda_deploy: {
         env: {
             arn: 'arn:aws:lambda:us-east-1:123456781234:function:my-function',
             s3_bucket: 'my-lambda-code-bucket',
@@ -320,7 +326,7 @@ grunt.initConfig({
             options: {}
         }
     },
-    aws_s3: { 
+    aws_s3: {
         options: {
         },
         env: {
@@ -336,9 +342,9 @@ grunt.initConfig({
 grunt.loadNpmTasks('grunt-aws-s3');
 grunt.loadNpmTasks('grunt-aws-lambda');    
 grunt.registerTask('deploy', ['lambda_package', 'aws_s3', 'lambda_deploy']);
-```	
+```
 
-##### s3_key_prefix 
+##### s3_key_prefix
 Type: `String`
 
 The S3 folder to be used if deploying from AWS S3. The resulting s3 key will be `<s3_bucket>://<s3_key_prefix>/<package>`
