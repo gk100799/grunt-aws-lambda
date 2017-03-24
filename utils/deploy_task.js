@@ -23,7 +23,9 @@ deployTask.getHandler = function (grunt) {
 
     return function () {
 
-        grunt.config.requires('lambda_deploy.' + this.target + '.package');
+        if(!grunt.option('package')){
+          grunt.config.requires('lambda_deploy.' + this.target + '.package');
+        }
 
         var options = this.options({
             profile: null,
@@ -79,13 +81,13 @@ deployTask.getHandler = function (grunt) {
         }
 
         var deploy_function = grunt.config.get('lambda_deploy.' + this.target + '.function');
-        var deploy_arn = grunt.config.get('lambda_deploy.' + this.target + '.arn');
-        var deploy_package = grunt.config.get('lambda_deploy.' + this.target + '.package');
+        var deploy_arn = grunt.option('arn') || grunt.config.get('lambda_deploy.' + this.target + '.arn');
+        var deploy_package = grunt.option('package') || grunt.config.get('lambda_deploy.' + this.target + '.package');
         var package_version = grunt.config.get('lambda_deploy.' + this.target + '.version');
         var package_name = grunt.config.get('lambda_deploy.' + this.target + '.package_name');
         var archive_name = grunt.config.get('lambda_deploy.' + this.target + '.archive_name');
-        var s3_key_prefix = grunt.config.get('lambda_deploy.' + this.target + '.s3_key_prefix');
-        var s3_bucket = grunt.config.get('lambda_deploy.' + this.target + '.s3_bucket');
+        var s3_key_prefix = grunt.option("s3_key_prefix") || grunt.config.get('lambda_deploy.' + this.target + '.s3_key_prefix');
+        var s3_bucket = grunt.option("s3_bucket") || grunt.config.get('lambda_deploy.' + this.target + '.s3_bucket');
 
         if (deploy_arn === null && deploy_function === null) {
             grunt.fail.warn('You must specify either an arn or a function name.');
@@ -282,6 +284,7 @@ deployTask.getHandler = function (grunt) {
             if(s3_bucket){
               codeParams.S3Key = (s3_key_prefix ? path.join(s3_key_prefix,deploy_package) : deploy_package);
               codeParams.S3Bucket = s3_bucket;
+              console.log("codeParams.S3Key",codeParams.S3Key)
               lambda.updateFunctionCode(codeParams, updateFunctionCodeCb);
 
             } else if(deploy_package){
