@@ -290,6 +290,7 @@ Type: `String`
 Default value: None - Required
 
 The ARN of your target Lambda function.
+This can be set from command line using `grunt lambda_deploy --arn=<arn>`
 
 ##### function
 Type: `String`
@@ -343,12 +344,15 @@ grunt.loadNpmTasks('grunt-aws-s3');
 grunt.loadNpmTasks('grunt-aws-lambda');    
 grunt.registerTask('deploy', ['lambda_package', 'aws_s3', 'lambda_deploy']);
 ```
+This can be set from command line using `grunt lambda_deploy --s3_bucket=<s3_bucket>`
 
 ##### s3_key_prefix
 Type: `String`
 
 The S3 folder to be used if deploying from AWS S3. The resulting s3 key will be `<s3_bucket>://<s3_key_prefix>/<package>`
 If null, the package is uploaded direclty into the root of the s3 Bucket.
+
+This can be set from command line using `grunt lambda_deploy --s3_key_prefix=<s3_key_prefix>`
 
 ##### package
 Type: `String`
@@ -380,6 +384,8 @@ grunt.initConfig({
 
 You could then run `grunt lambda_package lambda_deploy` and it'll automatically create the package and deploy it without
  having to specify a package name.
+
+This can be set from command line using `grunt lambda_deploy --package=<package>`
 
 ##### options.profile
 Type: `String`
