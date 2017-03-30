@@ -52,7 +52,7 @@ packageTask.getHandler = function (grunt) {
 
         archive_name += '_' + time_string;
 
-        npm.load([], function (err, npm) {
+        npm.load({ 'global-style': true }, function (err, npm) {
 
             npm.config.set('loglevel', 'silent');
 
