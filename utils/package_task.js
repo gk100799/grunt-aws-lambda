@@ -51,14 +51,15 @@ packageTask.getHandler = function (grunt) {
 
         archive_name += '_' + time_string;
 
-        npm.load([], function (err, npm) {
+        npm.load({ 'global-style': true }, function (err, npm) {
 
             npm.config.set('loglevel', 'silent');
 
             var install_location = dir.path;
             var zip_path = install_location + '/' + archive_name + '.zip';
+            var install_packages = ["file:"+path.resolve(options.package_folder)]
 
-            npm.commands.install(install_location, options.package_folder, function () {
+            npm.commands.install(install_location, install_packages, function () {
 
                 var output = fs.createWriteStream(zip_path);
                 var zipArchive = archive('zip');
