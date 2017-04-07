@@ -284,7 +284,6 @@ deployTask.getHandler = function (grunt) {
             if(s3_bucket){
               codeParams.S3Key = (s3_key_prefix ? path.join(s3_key_prefix,deploy_package) : deploy_package);
               codeParams.S3Bucket = s3_bucket;
-              console.log("codeParams.S3Key",codeParams.S3Key)
               lambda.updateFunctionCode(codeParams, updateFunctionCodeCb);
 
             } else if(deploy_package){
